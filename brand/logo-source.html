@@ -1,0 +1,46 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Outfit;font-weight:300;src:url(node_modules/@fontsource/outfit/files/outfit-latin-300-normal.woff2)}
+@font-face{font-family:Outfit;font-weight:600;src:url(node_modules/@fontsource/outfit/files/outfit-latin-600-normal.woff2)}
+@font-face{font-family:Outfit;font-weight:700;src:url(node_modules/@fontsource/outfit/files/outfit-latin-700-normal.woff2)}
+body{margin:0;background:transparent;font-family:Outfit,sans-serif}
+.logo{display:inline-flex;align-items:center;gap:22px;padding:30px 40px}
+.word .t1{font-weight:700;font-size:64px;letter-spacing:-1px;line-height:1}
+.word .t1 span{font-weight:300}
+.word .t2{font-weight:600;font-size:15px;letter-spacing:6px;margin-top:10px}
+.dark .t1{color:#fff}.dark .t1 span{color:#d9ccff}.dark .t2{color:#67e8f9}
+.light .t1{color:#080a24}.light .t1 span{color:#7c3aed}.light .t2{color:#4f46e5}
+#icon{padding:20px;display:inline-block}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#7c3aed"/><stop offset=".6" stop-color="#4f46e5"/><stop offset="1" stop-color="#0ea5e9"/>
+  </linearGradient>
+  <symbol id="mark" viewBox="0 0 120 120">
+    <rect width="120" height="120" rx="32" fill="url(#g)"/>
+    <rect x="1.5" y="1.5" width="117" height="117" rx="30.5" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="3"/>
+    <g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M42 32 V88"/>
+      <path d="M42 32 H64 a14 14 0 0 1 0 28 H42"/>
+      <path d="M42 60 H68 a14 14 0 0 1 0 28 H42"/>
+    </g>
+    <circle cx="42" cy="32" r="7" fill="#fff"/>
+    <circle cx="42" cy="88" r="7" fill="#fff"/>
+    <circle cx="42" cy="60" r="5" fill="#080a24" stroke="#fff" stroke-width="3"/>
+    <path d="M94 14 L97 23 L106 26 L97 29 L94 38 L91 29 L82 26 L91 23 Z" fill="#67e8f9"/>
+  </symbol>
+</defs></svg>
+
+<div id="dark" class="logo dark" style="background:#080a24;border-radius:28px">
+  <svg width="110" height="110"><use href="#mark"/></svg>
+  <div class="word"><div class="t1">Boost<span>2Business</span></div><div class="t2">B2B · AI SOLUTIONS</div></div>
+</div>
+<br>
+<div id="light" class="logo light">
+  <svg width="110" height="110"><use href="#mark"/></svg>
+  <div class="word"><div class="t1">Boost<span>2Business</span></div><div class="t2">B2B · AI SOLUTIONS</div></div>
+</div>
+<br>
+<div id="icon"><svg width="512" height="512"><use href="#mark"/></svg></div>
+</body></html>

@@ -1,0 +1,52 @@
+{
+  "_comment": "The offer block. Everything money-related is OFF until Karin types the numbers herself. show_prices=false → cards say 'הצעה מותאמת אחרי שיחת האפיון'. pilot.slots/discount null → shown without numbers. guarantee.show=false → no guarantee box. payment_url empty → no payment button.",
+  "wa": "https://wa.me/972547501261",
+  "phone": "054-7501261",
+  "phone_tel": "+972547501261",
+  "show_prices": false,
+  "no_price_text": "הצעה מותאמת אחרי שיחת האפיון",
+  "packages": [
+    {
+      "name": "סוכן ראשון",
+      "icon": "🌱",
+      "desc": "סוכן אחד, במשימה שהכי כואבת לכם, מחובר למה שכבר יש לכם.",
+      "price_from": null,
+      "price_monthly": null
+    },
+    {
+      "name": "צוות קטן",
+      "icon": "👥",
+      "desc": "שניים־שלושה סוכנים שעובדים יחד ומעבירים עבודה אחד לשני.",
+      "price_from": null,
+      "price_monthly": null,
+      "featured": true
+    },
+    {
+      "name": "פתרון למשרד",
+      "icon": "🏢",
+      "desc": "אוטומציה וחיבור בין המערכות שלכם, מהזמנה ועד גבייה.",
+      "price_from": null,
+      "price_monthly": null,
+      "href": "solutions.html"
+    },
+    {
+      "name": "למידה <span class=\"ltr\">1:1</span> או בקבוצה",
+      "icon": "🎓",
+      "desc": "הדרכה מעשית, בעברית או באנגלית.",
+      "price_from": null,
+      "price_monthly": null,
+      "href": "training.html"
+    }
+  ],
+  "pilot": {
+    "show": true,
+    "slots": null,
+    "discount": null,
+    "in_return": null
+  },
+  "guarantee": {
+    "show": false,
+    "text": null
+  },
+  "payment_url": ""
+}

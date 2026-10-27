@@ -1,0 +1,47 @@
+{
+  "_comment": "Build settings for tools/build_netlify.py. v6: Secular One (headlines), Rubik (body), Playpen Sans Hebrew (handwritten notes). The data/ folder (agents.json, offer.json) is source only and is not published.",
+  "site_url": "https://boost2business.netlify.app",
+  "title_overrides": {
+    "index.html": "סוכני AI, אוטומציה וחיבור מערכות לעסקים | Boost2Business"
+  },
+  "fonts": [
+    {
+      "family": "Secular One",
+      "npm": "@expo-google-fonts/secular-one",
+      "slug": "secular",
+      "weights": [
+        400
+      ]
+    },
+    {
+      "family": "Rubik",
+      "npm": "@expo-google-fonts/rubik",
+      "slug": "rubik",
+      "weights": [
+        400,
+        700,
+        800
+      ]
+    },
+    {
+      "family": "Playpen Sans Hebrew",
+      "npm": "@expo-google-fonts/playpen-sans-hebrew",
+      "slug": "playpen",
+      "weights": [
+        600
+      ],
+      "charset": "hebrew"
+    }
+  ],
+  "preload_fonts": [
+    "secular-400",
+    "rubik-400"
+  ],
+  "favicon_source": "brand/logo-icon.png",
+  "icon_background": "#080a24",
+  "exclude": [
+    "_preview.html",
+    "index.before_review.html",
+    "data"
+  ]
+}

@@ -1,0 +1,14 @@
+# tool caches and test output (regenerate any time)
+tools/.cache/
+node_modules/
+qa_out/
+lh/
+firstscreen.json
+*.zip
+.DS_Store
+Thumbs.db
+# real lead / client data never goes to git (only *.example.* files)
+data/*
+!data/*.example.*
+.env
+__pycache__/
