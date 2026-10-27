@@ -9,6 +9,8 @@ firstscreen.json
 Thumbs.db
 # real lead / client data never goes to git (only *.example.* files)
 data/*
+# generated quotes and any other per-client output (tools/make_quote.py writes here)
+out/
 !data/*.example.*
 .env
 __pycache__/

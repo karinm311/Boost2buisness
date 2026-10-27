@@ -13,6 +13,8 @@ How to use this file:
 | D3 | Response-time promise to new leads | Same day · within 24 h · other | Not shown on the site; internal goal of 24 h |
 | D4 | Booking the discovery call | Booking link (calendar appointment page) · manual in WhatsApp | **Manual**, until she opens a booking page herself |
 
+Phase 1 was built on 27 Oct 2026 with these defaults: `ops/lead-tracker.xlsx` (D1, upload to Drive → Google Sheet), plain link (D2; the funnel's "by source" table will show mostly "לא ידוע" until D2 changes), 24 h internal goal shown only as a placeholder in the greeting message (D3), manual booking with `/שיחה` and `/תזכורת` (D4).
+
 ## Open: money, legal, identity (Karin only)
 | # | Decision | Notes |
 |---|---|---|

@@ -27,6 +27,7 @@ This is a compact log of the previous working session with Karin, in the claude.
 | 19 | Same session | v6.1. Home `#paths` ("שלוש דרכים לעבוד איתי") infographic after the hero. New `solutions.html` (sectors, 3 pillars, "מפת המשרד" demo, 4-step process). The training page got a 1:1 vs 1:n comparison. Offer wording now covers all three. Second independent review fixed | — |
 | 20 | "מעולה איך הופכים ללינק שיעבוד לכולם ללא התחברות" | Explained that the public link is boost2business.netlify.app (the project is Public), with step-by-step links. Her first upload went through Netlify Drop and created a stray site that requires login (wonderful-hotteok-98f4c2); she was guided to Deploys of the existing project | In progress, she was uploading |
 | 21 | "/Handover … פקטה להעברה להמשך פרויקט בניית עסק בקלוד קוד… פרויקט חדש בgithub… מהלידים שפונים בווצאפ… ועד תמיכה" | This repo kit: v6.1 site, tools, CLAUDE.md for the new mission, HANDOVER, PIPELINE, DECISIONS, TASK (phase 1), Hebrew templates, and a Hebrew handover PDF | — |
+| 22 | New GitHub repo karinm311/Boost2buisness (27 Oct): "/github init /git init" with the kit zip | Kit committed and pushed to `main`. Phase 1 built with the D1–D4 defaults: lead tracker (`ops/lead-tracker.xlsx`, Sheet-ready), WhatsApp kit (`ops/whatsapp-setup.pdf`), discovery-call kit (`ops/discovery-call-kit.pdf`), quote generator (`tools/make_quote.py`, sample `ops/examples/quote-sample.pdf`), pipeline one-pager (`ops/pipeline-onepager.pdf`). All drafts, no prices | Waiting for her D1–D4 answers |
 
 ## 2. What v5 is (the live baseline)
 Source: `site/src/index.html`. Build: `site/dist/`.
@@ -111,3 +112,4 @@ Source: `site/src/index.html`. Build: `site/dist/`.
 | Portrait + avatar | `photos/` | — |
 | Pre-launch report v5 | `reports/pre-launch-report-v5.pdf` | — |
 | Research | `docs/RESEARCH.md` | claude.ai research report |
+| Phase 1 ops kit (tracker, WhatsApp, call, quote, pipeline) | `ops/` (built by `tools/build_ops_docs.py`, `tools/make_tracker.py`, `tools/make_quote.py`) | — |

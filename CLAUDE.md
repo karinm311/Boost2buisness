@@ -6,6 +6,7 @@
 > 3. **docs/TASK.md**: the current job, building the lead-to-support pipeline.
 > 4. **docs/PIPELINE.md**: the 10 stages from WhatsApp lead to support.
 > 5. **docs/DECISIONS.md**: open decisions that only Karin can make.
+> 6. **ops/**: the phase-1 working assets (tracker, WhatsApp, call kit, quote sample, pipeline one-pager). HANDOVER.md §0 lists how to rebuild each.
 >
 > **Background:**
 > - **docs/HISTORY.md**: what was built and how Karin reacted.

@@ -1,6 +1,6 @@
 # TASK: phase 1, from WhatsApp lead to call to quote
 
-Status: **ready to start**. Read CLAUDE.md, docs/HANDOVER.md, docs/PIPELINE.md and docs/DECISIONS.md first.
+Status: **built on 27 Oct 2026 with the D1–D4 defaults; waiting for Karin's answers and first real lead.** See HANDOVER.md §0 for what exists. Read CLAUDE.md, docs/HANDOVER.md, docs/PIPELINE.md and docs/DECISIONS.md first.
 
 ## 0. Session start (the first session in the new GitHub repo)
 1. If the repo is empty, bring the kit in, following the first prompt in README.md: Artifact read → copy → commit "Boost2Business handover kit (v6.1 site + ops)" → push.

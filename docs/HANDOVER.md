@@ -2,6 +2,25 @@
 
 A cloud Claude Code session wrote this at the end of the v6 work, at Karin's request ("/Handover … פרויקט חדש ב-GitHub"). It is the single page to read before doing anything. Karin received the same content in Hebrew, as `handover/Boost2Business-Handover.pdf`.
 
+## 0. Update, 27 Oct 2026: phase 1 built (lead → call → quote)
+The kit lives in GitHub: karinm311/Boost2buisness, branch `main`. Phase 1 (docs/TASK.md) was built with the D1–D4 defaults. Everything client-facing is stamped "טיוטה לאישור קארין", and no price, term or guarantee was filled.
+
+| Asset | File | Rebuild |
+|---|---|---|
+| Lead tracker: tabs לידים / משפך / הסבר / רשימות; dropdowns, overdue in red, funnel by week and source, hours | `ops/lead-tracker.xlsx` (empty; Karin uploads it to Drive, where it opens as a Google Sheet) | `python3 tools/make_tracker.py` |
+| WhatsApp Business setup (1 page) + all 12 quick replies (appendix) | `ops/whatsapp-setup.pdf` from `templates/whatsapp-replies.md` | `python3 tools/build_ops_docs.py` |
+| Discovery-call script + printable summary form ("מפת המשימות") | `ops/discovery-call-kit.pdf` | same |
+| Quote generator: call summary (text) → branded PDF + the `/הצעה` message | `tools/make_quote.py`; input shape `templates/examples/call-summary.example.txt`; sample `ops/examples/quote-sample.pdf` (fictional, "דוגמה"). Real quotes go to `out/quotes/` (gitignored) | `python3 tools/make_quote.py summary.txt` |
+| The 10 stages on one page | `ops/pipeline-onepager.pdf` | `python3 tools/build_ops_docs.py` |
+| Shared PDF look (night band, logo, Secular One / Rubik, draft stamp) | `tools/render_pdf.py` (Node Playwright + full TTFs from the npm font cache) | — |
+
+**Not done in phase 1, and why:**
+- The tracker was not uploaded to Drive by Claude. Pasting a 40 KB binary through the connector risks a corrupt file. Karin uploads the .xlsx herself (Drive → New → File upload → Open with Google Sheets).
+- WhatsApp menu paths were checked against 2026 third-party guides, not official help pages. The PDF says the names may differ by version.
+- "Average days per stage" needs stage timestamps. That comes with the phase 3 n8n flow.
+
+**Next:** her answers to D1–D4, then phase 2 (payment and onboarding, after D5–D10).
+
 ## 1. Who and what
 - **Karin.** She has built systems solutions in hi-tech since 2011: ERP/CRM, order-to-cash and integrations. She broke into AI in recent years. She runs **Boost2Business** next to a full-time job, with about 6 hours a week.
 - **She sells three things.** All three must stay visible (her words, 26 Oct: "לפני שנהפוך לסקייל… אני עדיין מוכרת גם פתרונות ai למשרדים ובעלי עסקים ולמידה 1:1, 1:n"):
