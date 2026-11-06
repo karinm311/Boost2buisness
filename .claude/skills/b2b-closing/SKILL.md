@@ -7,7 +7,7 @@ description: "Boost2Business closing and payment. Use when a client accepts a qu
 ## Steps
 1. **Acceptance arrived** (email, WhatsApp, signed quote): log `quote_accepted` with the message as `--file`.
 2. **Check the gate:** are D5–D9 decided (prices, payment structure, business registration, invoicing tool, payment link)? Read memory, or ask Karin.
-   - **Not decided:** don't draft a payment request. Tell her which decision blocks this deal, and draft a warm "מעולה, אשלח את פרטי התשלום בהקדם" message instead.
+   - **Not decided:** log `blocked_decision --summary "<which of D5–D9 block this deal>"`. Don't draft a payment request. Tell her which decision blocks this deal, and draft a warm "מעולה, אשלח את פרטי התשלום בהקדם" message instead.
 3. **Decided:**
    - Fill `references/templates/email/payment-request.md` with HER amount, terms and link only.
    - Draft it, and log `payment_requested` after she sends it.

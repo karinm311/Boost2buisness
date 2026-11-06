@@ -103,3 +103,16 @@ The flow:
 - The test Gmail draft is still in Karin's Drafts. Deleting it is her call.
 - The morning brief (scheduled task) is waiting for her to pick a time.
 - D15–D19.
+
+**Live test, part 2 (6 Nov 2026): closing and spec.**
+- b2b-closing correctly refused a payment request while D5–D9 are open. It drafted a warm holding email instead. Added because of it: the `blocked_decision` event and `log --owner`.
+- b2b-spec drafted the kickoff email, logged the meeting transcript, and wrote `docs/spec-v1.md` with a cover email.
+- Karin asked to stop after this stage, so the delivery and go-live/support agents were not run live yet.
+
+**Open fixes found in part 2, for the next session:**
+1. A transcript of the full-spec meeting is logged as `call_transcript`, which moves the stage back to 2b. It needs its own event (e.g. `spec_meeting_transcript`) that keeps the stage.
+2. `log --file` copies a document that is already in the folder. It should reference files already inside the client folder instead.
+3. Order: the kickoff email should go before the spec meeting. The orchestrator should cancel it when the meeting has already happened.
+4. There is no template for the spec cover email. Add `templates/email/spec-cover.md`.
+5. `lint` should also check documents in `docs/` (spec, quote), not only drafts.
+6. `payment-request.md` and the other templates are plural. Agents adapt them to `address`, but singular variants would be safer.

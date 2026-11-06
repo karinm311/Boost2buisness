@@ -47,6 +47,7 @@ class ClientFolderTest(unittest.TestCase):
 
     def test_every_rule_owner_is_a_skill(self):
         skills = set(os.listdir(os.path.join(os.path.dirname(__file__), "..", "skills")))
+        skills.add("karin")  # events that wait on Karin's own decision
         for k, r in cf.RULES["events"].items():
             if r["owner"]:
                 self.assertIn(r["owner"], skills, k)

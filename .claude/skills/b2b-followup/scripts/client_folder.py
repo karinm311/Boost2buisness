@@ -184,7 +184,7 @@ def parse_data(pairs):
 
 
 def do_log(folder, etype, summary, who="karin", channel=None, file=None, date=None, data=None, consent_given=False,
-           next_action=None, next_template=None):
+           next_action=None, next_template=None, owner=None):
     if etype not in RULES["events"]:
         raise SystemExit(f"unknown event type '{etype}'. See: client_folder.py events")
     c = load(folder)
@@ -213,6 +213,8 @@ def do_log(folder, etype, summary, who="karin", channel=None, file=None, date=No
         c["next_action"] = next_action
     if next_template is not None:
         c["next_template"] = next_template
+    if owner is not None:
+        c["next_owner"] = owner
     if rule.get("next_action") is not None:
         ev["next"] = {"action": c.get("next_action"), "date": c.get("next_action_date"), "owner": c.get("next_owner")}
     c["updated"] = ev["ts"]
@@ -246,7 +248,7 @@ def cmd_new(a):
 def cmd_log(a):
     folder = resolve(root_dir(a), a.client)
     ev, c = do_log(folder, a.type, a.summary, a.who, a.channel, a.file, a.date, parse_data(a.data), a.consent_given,
-                   a.next, a.next_template)
+                   a.next, a.next_template, a.owner)
     label = RULES["events"][a.type]["label"]
     print(f"נרשם ב-{c['id']}: {label}" + (f" · קובץ: {ev['file']}" if ev.get("file") else ""))
     if ev.get("note"):
@@ -586,6 +588,7 @@ def main(argv=None):
     p.add_argument("--consent-given", action="store_true")
     p.add_argument("--next", help="override the rule's next action (text)")
     p.add_argument("--next-template", help="override the rule's template, e.g. whatsapp:/שיחה")
+    p.add_argument("--owner", help="override who handles the next action (a b2b-* skill, or karin)")
     p.set_defaults(f=cmd_log)
     p = sp.add_parser("draft")
     p.add_argument("client")

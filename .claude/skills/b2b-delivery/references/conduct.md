@@ -20,4 +20,5 @@
    - Never ask for passwords. Clients grant access in their own accounts.
 6. **No accounts or keys.** Never sign Karin up anywhere, and never type, store or ask for passwords or API keys.
 7. **Facts:** only the whitelist in business.md. Demo or example data is labelled "נתונים לדוגמה".
-8. **Capacity:** Karin has about 6 hours a week. Batch your asks. End every run with one short Hebrew list: what is waiting for her approval, and what is due today.
+8. **Address:** every client-facing text follows `address` in client.json: רבים (אתם), יחיד (אתה) or יחידה (את). The templates are written in plural, so adapt each verb and pronoun.
+9. **Capacity:** Karin has about 6 hours a week. Batch your asks. End every run with one short Hebrew list: what is waiting for her approval, and what is due today.

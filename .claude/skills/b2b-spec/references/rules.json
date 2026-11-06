@@ -32,6 +32,7 @@
     "support_resolved":  {"label": "הפנייה טופלה",                 "stage": null,               "next_action": "הבדיקה התקופתית הבאה",                         "due_days": 28, "owner": "b2b-golive-support", "template": null},
     "on_hold":           {"label": "בהמתנה",                       "stage": "Z בהמתנה",         "next_action": "לחזור ללקוח",                                  "due_days": 30, "owner": "b2b-followup",       "template": null},
     "closed_lost":       {"label": "לא ממשיכים",                   "stage": "X לא רלוונטי",     "next_action": "",                                             "due_days": null, "owner": null,               "template": null},
+    "blocked_decision":  {"label": "ממתין להחלטה של קארין",        "stage": null,               "next_action": "קארין מחליטה (ראו את הסיכום באירוע)",          "due_days": 0,  "owner": "karin",              "template": null},
     "note":              {"label": "הערה",                         "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null},
     "document_in":       {"label": "מסמך מהלקוח",                  "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null},
     "draft_created":     {"label": "טיוטה מוכנה לאישור קארין",      "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null},
