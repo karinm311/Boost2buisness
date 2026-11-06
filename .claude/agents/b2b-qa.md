@@ -16,6 +16,8 @@ The client and its clients root (`B2B_CLIENTS_DIR`). Optionally, specific draft 
    - **Numbers:** no hours, amounts, percentages or results unless the client said them (marked "לפי הלקוח") or Karin typed them. Prices and terms must be `[קארין ממלאת]` unless she decided them (docs/DECISIONS.md).
    - **Value proposition:** only topics from `value-props.json` that really came up in the call, with no added promises.
    - **Recipient:** the address equals the client's email in client.json. The draft goes to no one else.
+   - **Address:** one form all through the email. Singular (את/אתה) for a 1:1 client, plural (אתם) for a team. No mixing.
+   - **No invented commitments:** no "כמו שהבטחתי", and no promise or mechanism the client didn't discuss. A value line may only rephrase `value-props.json`.
    - **Tone:** Hebrew, warm, short. Karin writes about herself in the feminine. No corporate filler. At most one emoji per message.
    - The stamp `טיוטה לאישור קארין` is present.
 3. **Verdict per draft:** PASS, or FIX with the exact line and the fix. Hebrew, at most 10 lines in total.

@@ -151,6 +151,8 @@ def apply_rule(c, etype, when, data):
             c["call_date"] = cd.isoformat()
             due = max(when, cd - dt.timedelta(days=1))
         c["next_action_date"] = due.isoformat() if due else ""
+    if etype in ("call_transcript", "call_notes", "call_recording"):
+        c["call_date"] = when.isoformat()
     if etype == "quote_declined" and data.get("reason"):
         c["lost_reason"] = data["reason"]
     return rule
@@ -269,15 +271,20 @@ def cmd_draft(a):
         md.append(f"- טיוטה ב-Gmail: {a.gmail_id}")
     open(base + ".md", "w", encoding="utf-8").write("\n".join(md) + "\n\n" + body + "\n")
     files = [os.path.relpath(base + ".md", folder)]
+    plain = re.sub(r"\*\*(.+?)\*\*", r"\1", body)  # Gmail body / .eml are plain text: no Markdown
+    open(base + ".txt", "w", encoding="utf-8").write(plain + "\n")
     if a.kind == "email":
         # an .eml Karin can open in any mail app (marked as a draft); she sends it herself
         eml = (f"X-Unsent: 1\nTo: {a.to or ''}\nSubject: {a.subject or a.title}\nMIME-Version: 1.0\n"
-               f"Content-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\n\n{body}\n")
+               f"Content-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\n\n{plain}\n")
         open(base + ".eml", "w", encoding="utf-8").write(eml)
         files.append(os.path.relpath(base + ".eml", folder))
     c.setdefault("pending_drafts", []).append({"id": did, "kind": a.kind, "title": a.title, "file": files[0],
                                                "created": now().isoformat(), "status": "draft",
                                                "gmail_id": a.gmail_id or ""})
+    c["next_action"] = f"לאשר ולשלוח: {a.title} ({did})"
+    c["next_owner"] = "karin"
+    c["next_action_date"] = today().isoformat()
     save(folder, c)
     do_log(folder, "draft_created", f"{a.title}" + (f" · אל {a.to}" if a.to else ""), who="agent",
            channel="email" if a.kind == "email" else a.kind, data={"draft_id": did, "file": files[0]})
@@ -339,7 +346,7 @@ def cmd_set(a):
         tgt[parts[-1]] = v
         changed.append(k)
     save(folder, c)
-    do_log(folder, "profile_update", "עודכן: " + ", ".join(changed), who="karin", channel="note")
+    do_log(folder, "profile_update", "עודכן: " + ", ".join(changed), who=a.who, channel="note")
     print(f"{c['id']}: " + ", ".join(changed))
 
 
@@ -516,6 +523,8 @@ def cmd_lint(a):
         print(f"{d['id']} · {d['title']}: " + ("PASS" if not res else ""))
         for lvl, msg in res:
             print(f"  {lvl} · {msg}")
+        for q in sorted(set(re.findall(r"\[קארין מאשרת[^\]]*\]", text))):
+            print(f"  WARN · שאלה פתוחה לקארין, להחליט ולמחוק לפני שליחה: {q}")
         todo = sorted(set(re.findall(r"\[[^\]]{2,40}\]", text)) - {f"[{DRAFT}]"})
         if todo:
             print("  למילוי לפני שליחה: " + " ".join(todo))
@@ -577,6 +586,7 @@ def main(argv=None):
     p.set_defaults(f=cmd_cancel)
     p = sp.add_parser("set")
     p.add_argument("client")
+    p.add_argument("--who", default="karin", choices=list(WHO))
     p.add_argument("pairs", nargs="+")
     p.set_defaults(f=cmd_set)
     for name, fn in (("show", cmd_show),):
