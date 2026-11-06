@@ -7,7 +7,8 @@ description: "Boost2Business new-lead intake. Use when a new person contacts Kar
 ## Steps
 1. **Check it's new:** `client_folder.py find "<phone or name>"`. If a folder exists, log `message_in` there and stop.
 2. **Open a folder:**
-   `client_folder.py new --name "<name>" --phone "<phone>" --email "<email if given>" --business "<business if known>" --source "<מקור>" --track "<פתרון|סוכן|למידה|עוד לא ברור>" --channel <whatsapp|email|linkedin|site|phone> --message "<the first message, short>" [--consent-contact]`
+   `client_folder.py new --name "<name>" --phone "<phone>" --email "<email if given>" --business "<business if known>" --source "<מקור>" --track "<פתרון|סוכן|למידה|עוד לא ברור>" --channel <whatsapp|email|linkedin|site|phone> --message "<the first message, short>" [--consent-contact] --address <רבים|יחיד|יחידה>`
+   - `--address`: plural for a business or team; singular (יחיד / יחידה) when one person writes about themselves. Every draft follows this field.
    - Add `--consent-contact` only if the lead asked to be contacted, or agreed to it.
    - If the need is already clear, also add `--next "מענה ראשון + הזמנה לשיחה (/שיחה1)" --next-template whatsapp:/שיחה1`.
    - Source values: אתר/דף הבית, אתר/פתרונות, אתר/למידה, אתר/עמוד סוכן, לינקדאין, פייסבוק, וואטסאפ ישיר, המלצה מפה לאוזן, אחר, לא ידוע.

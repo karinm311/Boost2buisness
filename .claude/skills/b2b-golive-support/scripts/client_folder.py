@@ -26,6 +26,7 @@ usage:
   client_folder.py log CLIENT --type TYPE --summary TEXT [--who client|karin|agent] [--channel C]
                        [--file PATH] [--date YYYY-MM-DD] [--data k=v ...] [--consent-given]
   client_folder.py draft CLIENT --kind email|whatsapp|doc --title T --body-file F [--to ADDR] [--subject S] [--gmail-id ID]
+  client_folder.py revise CLIENT DRAFT_ID --body-file F --reason R   (new text for a pending draft, e.g. after QA)
   client_folder.py approve CLIENT DRAFT_ID          (Karin approved; the draft can be sent)
   client_folder.py sent CLIENT DRAFT_ID --type EVENT   (Karin sent it; logs EVENT, e.g. summary_sent)
   client_folder.py cancel CLIENT DRAFT_ID --reason R   (a draft that is no longer relevant; never deletes Gmail drafts)
@@ -233,7 +234,7 @@ def cmd_new(a):
          "source": a.source or "לא ידוע", "track": a.track or "עוד לא ברור", "created": today().isoformat(),
          "stage": "", "next_action": "", "next_action_date": "", "next_owner": None,
          "consents": {"contact": "yes" if a.consent_contact else "", "recording": ""},
-         "pending_drafts": [], "lost_reason": "", "notes": ""}
+         "address": a.address, "pending_drafts": [], "lost_reason": "", "notes": ""}
     save(folder, c)
     ev, c = do_log(folder, "lead_in", a.message or "פנייה חדשה", who="client", channel=a.channel,
                    next_action=a.next, next_template=a.next_template)
@@ -296,6 +297,30 @@ def _draft(c, did):
         if d["id"] == did:
             return d
     raise SystemExit(f"no draft {did}. Pending: " + ", ".join(d["id"] for d in c.get("pending_drafts", [])) or "none")
+
+
+def cmd_revise(a):
+    """Replace the body of a pending draft (after QA or Karin's notes). Rewrites .md/.txt/.eml, keeps the id."""
+    folder = resolve(root_dir(a), a.client)
+    c = load(folder)
+    d = _draft(c, a.draft_id)
+    body = open(a.body_file, encoding="utf-8").read().strip()
+    if DRAFT not in body:
+        body = f"[{DRAFT}]\n\n{body}"
+    md_path = os.path.join(folder, d["file"])
+    head = open(md_path, encoding="utf-8").read().split("\n\n", 1)[0]
+    open(md_path, "w", encoding="utf-8").write(head + "\n\n" + body + "\n")
+    plain = re.sub(r"\*\*(.+?)\*\*", r"\1", body)
+    base = md_path[:-3]
+    open(base + ".txt", "w", encoding="utf-8").write(plain + "\n")
+    if os.path.exists(base + ".eml"):
+        eml = open(base + ".eml", encoding="utf-8").read().split("\n\n", 1)[0]
+        open(base + ".eml", "w", encoding="utf-8").write(eml + "\n\n" + plain + "\n")
+    d["status"] = "draft"
+    d["revisions"] = d.get("revisions", 0) + 1
+    save(folder, c)
+    do_log(folder, "draft_revised", f"{d['title']} · {a.reason}", who="agent", channel="note", data={"draft_id": d["id"]})
+    print(f"{d['id']} עודכנה (גרסה {d['revisions'] + 1}). אם יש טיוטה ב-Gmail: update_draft עם {base}.txt")
 
 
 def cmd_approve(a):
@@ -500,6 +525,8 @@ def lint_text(text, c):
             out.append(("FAIL", f"סכום כסף בלי החלטה של קארין: {line.strip()[:80]}"))
         if PCT.search(line) and not ok_src:
             out.append(("WARN", f"אחוז, לוודא שהלקוח אמר אותו: {line.strip()[:80]}"))
+        if re.search(r"\b\d{1,2}[./]\d{1,2}\b", line) and "קארין" not in line:
+            out.append(("WARN", f"תאריך בטיוטה, לוודא שקארין קבעה אותו: {line.strip()[:80]}"))
         if HOURS.search(line) and not ok_src and not re.search(r"30 דקות|שיחת אפיון|\d+ שבועות", line):
             out.append(("WARN", f"זמן או כמות, לוודא שמגיע מהלקוח: {line.strip()[:80]}"))
     for addr in set(re.findall(r"[\w.+-]+@[\w-]+\.[\w.]+", text)):
@@ -541,6 +568,8 @@ def main(argv=None):
     for k in ("phone", "email", "business", "source", "track", "message"):
         p.add_argument(f"--{k}")
     p.add_argument("--channel", default="whatsapp")
+    p.add_argument("--address", default="רבים", choices=["רבים", "יחיד", "יחידה"],
+                   help="how drafts address the client: plural (a business/team), or singular m/f (1:1)")
     p.add_argument("--consent-contact", action="store_true", help="the lead agreed to be contacted back")
     p.add_argument("--next", help="override the first next action, e.g. when the need is clear: מענה ראשון + הזמנה לשיחה (/שיחה1)")
     p.add_argument("--next-template")
@@ -567,6 +596,12 @@ def main(argv=None):
     p.add_argument("--subject")
     p.add_argument("--gmail-id")
     p.set_defaults(f=cmd_draft)
+    p = sp.add_parser("revise")
+    p.add_argument("client")
+    p.add_argument("draft_id")
+    p.add_argument("--body-file", required=True)
+    p.add_argument("--reason", required=True)
+    p.set_defaults(f=cmd_revise)
     p = sp.add_parser("approve")
     p.add_argument("client")
     p.add_argument("draft_id")

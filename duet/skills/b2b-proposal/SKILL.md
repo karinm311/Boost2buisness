@@ -10,9 +10,9 @@ description: "Boost2Business proposal writer. Use to draft the same-day call-sum
    - `{pain_in_their_words}` and `{success}`: from the summary, in their words.
    - `{task_map}`: one line per task.
    - `{value_blocks}`: for each topic from `references/value-props.json`, the name, `value`, `hitl` ("איפה אתם מאשרים"), `proof` and the `page` link. Adapt one clause to their business. Don't add claims.
-   - **Address:** match the client. Use singular (את/אתה) when the call was 1:1 and they spoke for themselves, plural (אתם) for a team. Keep the same form all through the email.
+   - **Address:** follow `address` in client.json (רבים / יחיד / יחידה). If it is missing, match the client. Use singular (את/אתה) when the call was 1:1 and they spoke for themselves, plural (אתם) for a team. Keep the same form all through the email.
    - `{first_step}`: the recommendation from the summary.
-   - `{quote_date}`: ask Karin, or default to two working days.
+   - `{quote_date}`: only a date Karin gave. Otherwise write `[קארין ממלאת תאריך]`. Never pick a date for her: it commits her time.
 3. **Draft it:** Gmail draft to the client's email (or `client_folder.py draft --kind email --to <email> --subject "<subject>" --body-file mail.txt`).
 4. **After Karin sends:** `client_folder.py sent <client> <D###> --type summary_sent`.
 

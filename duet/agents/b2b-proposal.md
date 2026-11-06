@@ -21,6 +21,7 @@ The orchestrator gives you:
   - `body` is plain text, no Markdown. The first line is `[טיוטה לאישור קארין]`.
   - Then register it: `client_folder.py draft <client> --kind email --to <email> --subject <subject> --body-file <same text> --gmail-id <draft id>`.
 - **Plain-text body:** the email templates use `**bold**` for readability. The Gmail `body` is plain text, so use the `.txt` that `client_folder.py draft` writes, which has the Markdown removed. Or send `htmlBody` with `<b>`.
+- **Revising after QA or Karin:** write the new text to a file, run `client_folder.py revise <client> <D###> --body-file <file> --reason "<why>"`, then `update_draft` on the same Gmail draft with the `.txt` it prints.
 - **Unknowns:** anything Karin must confirm (an unconfirmed topic, a missing first step, the quote date) goes in the body as `[קארין מאשרת: …]`. Lint warns about these until she resolves them.
 - **Quote:** `python3 tools/make_quote.py <summary.txt> -o "<client folder>/docs/<quote id>.pdf"`. Log it as `note --file`. Attach the PDF to the cover-email Gmail draft (base64 attachment) only if Karin asked. Otherwise tell her where it is.
 - **No client email in client.json:** make the folder draft (.eml) and ask for the address.

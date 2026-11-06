@@ -35,6 +35,7 @@
     "note":              {"label": "הערה",                         "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null},
     "document_in":       {"label": "מסמך מהלקוח",                  "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null},
     "draft_created":     {"label": "טיוטה מוכנה לאישור קארין",      "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null},
+    "draft_revised":     {"label": "טיוטה עודכנה",                 "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null},
     "draft_approved":    {"label": "קארין אישרה טיוטה",             "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null},
     "profile_update":    {"label": "עדכון פרטי לקוח",              "stage": null,               "next_action": null,                                          "due_days": null, "owner": null,               "template": null}
   }

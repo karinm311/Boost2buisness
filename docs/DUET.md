@@ -49,3 +49,57 @@ The root comes from `--root`, else `$B2B_CLIENTS_DIR`, else `./clients`. The `cl
 2. Run `python3 -m unittest discover duet/tests`.
 3. Run `python3 tools/build_duet.py`.
 4. Give Karin the changed zips to re-upload.
+
+## Claude Code alternative (until Duet is on Karin's plan): `/duet` + sub-agents
+Karin, 6 Nov 2026: "duet עדיין לא זמין פה המנוי שלי. עד אז תגדיר אלטרנטיבה ל-agent orchestration and sub agents".
+
+**How it works:**
+- `/duet <input>` (`duet/commands/duet.md` → `.claude/commands/`) is the orchestrator. It:
+  1. logs the input;
+  2. routes it to the event's owner sub-agent;
+  3. runs independent agents in parallel;
+  4. runs **b2b-qa** on every new draft, and sends the fixes back to the writer once;
+  5. reports what waits for Karin.
+- `duet/agents/*.md` → `.claude/agents/` hold the 10 team members. Each one follows its skill in `.claude/skills/<name>/`.
+  - Tools are scoped per agent:
+    - Gmail: drafts only, plus reading threads;
+    - Calendar: read-only, with `timeZone: Asia/Jerusalem`, because her calendar is set to UTC;
+    - WhisperAI: read-only.
+  - No agent can send, reply, forward, delete, or create events.
+- **New agents load at session start.** A session that has just created or changed them must restart before they are callable by name.
+
+**Live test, 6 Nov 2026.** Fictional client "אורי (דמות לדוגמה)", in a scratch root, not committed.
+
+The flow:
+1. b2b-intake opened the folder and drafted a `/שיחה1` reply.
+2. Orchestrator: sent + call_booked.
+3. b2b-followup drafted the reminder and checked the calendar (read-only: no conflict, two backup slots).
+4. b2b-discovery logged the transcript with consent, wrote the summary, and picked the topics dana + gal.
+5. In parallel:
+   - b2b-proposal created a **real Gmail draft** in karinm311@gmail.com (subject "בדיקה · לא לשלוח · …", to ori@example.com);
+   - b2b-client-file checked Gmail and wrote HISTORY.md plus a pre-call brief.
+6. b2b-qa returned FIX twice:
+   - singular/plural mixed; "כמו שהבטחתי"; an added claim in the gal block;
+   - then an invented quote date.
+   
+   Both rounds were fixed, then lint PASS.
+
+**What changed because of it:**
+- **Engine:**
+  - `--next` / `--next-template` overrides;
+  - a draft makes "Karin approves and sends" the next action;
+  - `cancel` (stale drafts), `revise` (new text for a pending draft), `lint`;
+  - `call_summary_ready` routes to proposal;
+  - the call date follows the real call;
+  - drafts get a plain-text `.txt` with no Markdown;
+  - a per-client `address` (רבים / יחיד / יחידה).
+- **Templates and rules:**
+  - `/שיחה1` first-contact invitation;
+  - the address rule and the no-invented-promise rule in the template and in QA;
+  - `{quote_date}` only from Karin.
+
+**Still open:**
+- WhisperAI needed re-authentication during the test, so reading recordings there is not verified yet.
+- The test Gmail draft is still in Karin's Drafts. Deleting it is her call.
+- The morning brief (scheduled task) is waiting for her to pick a time.
+- D15–D19.
