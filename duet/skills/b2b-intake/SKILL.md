@@ -7,17 +7,19 @@ description: "Boost2Business new-lead intake. Use when a new person contacts Kar
 ## Steps
 1. **Check it's new:** `client_folder.py find "<phone or name>"`. If a folder exists, log `message_in` there and stop.
 2. **Open a folder:**
-   `client_folder.py new --name "<name>" --phone "<phone>" --email "<email if given>" --business "<business if known>" --source "<מקור>" --track "<פתרון|סוכן|למידה|עוד לא ברור>" --message "<the first message, short>"`
+   `client_folder.py new --name "<name>" --phone "<phone>" --email "<email if given>" --business "<business if known>" --source "<מקור>" --track "<פתרון|סוכן|למידה|עוד לא ברור>" --channel <whatsapp|email|linkedin|site|phone> --message "<the first message, short>" [--consent-contact]`
+   - Add `--consent-contact` only if the lead asked to be contacted, or agreed to it.
+   - If the need is already clear, also add `--next "מענה ראשון + הזמנה לשיחה (/שיחה1)" --next-template whatsapp:/שיחה1`.
    - Source values: אתר/דף הבית, אתר/פתרונות, אתר/למידה, אתר/עמוד סוכן, לינקדאין, פייסבוק, וואטסאפ ישיר, המלצה מפה לאוזן, אחר, לא ידוע.
    - Keep only name, phone, email, business and need (privacy).
 3. **Draft the first reply:**
    - Start from `/שלום` in `references/templates/whatsapp-replies.md`. Put their name in, and mirror one word from their message.
-   - If the need is already clear, use `/שיחה` instead (invite to the free 30-minute call, "הטבת השקה ללקוחות חדשים").
+   - If the need is already clear, use `/שיחה1`: the first-contact invitation to the free 30-minute call.
    - Save it as a `whatsapp` draft.
 4. **Clearly not a fit:** draft `/לאעכשיו` with a short, true reason. Note it so Karin can decide; don't close the folder yourself.
 5. **Tell Karin:**
    - the draft;
-   - that after she sends it she should log `reply_sent`, or say "שלחתי" and you log it;
+   - that after she sends it she should log `reply_sent`, or say "שלחתי" and you log it. If the reply already invited them to the call, the next step is setting the call time;
    - the tracker row to add (`ops/lead-tracker.xlsx`): date, name, phone, source, track, first message, stage "0 ליד חדש".
 
 ## Always

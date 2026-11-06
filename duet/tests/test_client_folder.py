@@ -133,6 +133,19 @@ class ClientFolderTest(unittest.TestCase):
         self.assertEqual(c["consents"]["recording"], "yes")
         self.assertEqual(c["email"], "a@example.com")
 
+    def test_lint_catches_money_and_forbidden(self):
+        b = self.file("זה יעלה 500 ₪\nיד ימין", "bad.txt")
+        run(self.root, "draft", "C-0001", "--kind", "email", "--title", "t", "--body-file", b)
+        with self.assertRaises(SystemExit):
+            run(self.root, "lint", "C-0001")
+
+    def test_lint_passes_clean_draft_with_placeholders(self):
+        b = self.file("היי, המחיר: [קארין ממלאת]. שיחת אפיון של 30 דקות.", "ok.txt")
+        run(self.root, "draft", "C-0001", "--kind", "email", "--title", "t", "--body-file", b)
+        out = run(self.root, "lint", "C-0001")
+        self.assertIn("PASS", out)
+        self.assertIn("[קארין ממלאת]", out)
+
     def test_unknown_event_rejected(self):
         with self.assertRaises(SystemExit):
             run(self.root, "log", "C-0001", "--type", "nope", "--summary", "x")

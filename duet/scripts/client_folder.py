@@ -31,6 +31,7 @@ usage:
   client_folder.py set CLIENT key=value ...        (profile fields; consents.recording=yes etc.)
   client_folder.py show CLIENT | find TEXT | board | due [--days N] | history CLIENT [--out F] [--brief]
   client_folder.py events                          (the event types and what each triggers)
+  client_folder.py lint CLIENT [DRAFT_ID ...]      (checks drafts: stamp, forbidden phrases, money/numbers, recipients)
 CLIENT = id (C-0001), folder name, or any unique part of the name/phone/email.
 """
 import argparse
@@ -178,7 +179,8 @@ def parse_data(pairs):
     return d
 
 
-def do_log(folder, etype, summary, who="karin", channel=None, file=None, date=None, data=None, consent_given=False):
+def do_log(folder, etype, summary, who="karin", channel=None, file=None, date=None, data=None, consent_given=False,
+           next_action=None, next_template=None):
     if etype not in RULES["events"]:
         raise SystemExit(f"unknown event type '{etype}'. See: client_folder.py events")
     c = load(folder)
@@ -203,6 +205,10 @@ def do_log(folder, etype, summary, who="karin", channel=None, file=None, date=No
     if data:
         ev["data"] = data
     rule = apply_rule(c, etype, when, data)
+    if next_action is not None:  # the skill knows better than the generic rule (e.g. the call was already offered)
+        c["next_action"] = next_action
+    if next_template is not None:
+        c["next_template"] = next_template
     if rule.get("next_action") is not None:
         ev["next"] = {"action": c.get("next_action"), "date": c.get("next_action_date"), "owner": c.get("next_owner")}
     c["updated"] = ev["ts"]
@@ -226,7 +232,8 @@ def cmd_new(a):
          "consents": {"contact": "yes" if a.consent_contact else "", "recording": ""},
          "pending_drafts": [], "lost_reason": "", "notes": ""}
     save(folder, c)
-    ev, c = do_log(folder, "lead_in", a.message or "פנייה חדשה", who="client", channel=a.channel)
+    ev, c = do_log(folder, "lead_in", a.message or "פנייה חדשה", who="client", channel=a.channel,
+                   next_action=a.next, next_template=a.next_template)
     print(f"נפתח תיק: {os.path.basename(folder)}")
     print(f"הצעד הבא: {c['next_action']} · עד {c['next_action_date']} · מטפל: {c['next_owner']}")
     print(folder)
@@ -234,7 +241,8 @@ def cmd_new(a):
 
 def cmd_log(a):
     folder = resolve(root_dir(a), a.client)
-    ev, c = do_log(folder, a.type, a.summary, a.who, a.channel, a.file, a.date, parse_data(a.data), a.consent_given)
+    ev, c = do_log(folder, a.type, a.summary, a.who, a.channel, a.file, a.date, parse_data(a.data), a.consent_given,
+                   a.next, a.next_template)
     label = RULES["events"][a.type]["label"]
     print(f"נרשם ב-{c['id']}: {label}" + (f" · קובץ: {ev['file']}" if ev.get("file") else ""))
     if ev.get("note"):
@@ -301,7 +309,7 @@ def cmd_sent(a):
     save(folder, c)
     ch = "email" if d["kind"] == "email" else ("whatsapp" if d["kind"] == "whatsapp" else "file")
     ev, c = do_log(folder, a.type, a.summary or f"נשלח: {d['title']}", who="karin", channel=ch,
-                   data={"draft_id": d["id"], "file": d["file"]})
+                   data={"draft_id": d["id"], "file": d["file"]}, next_action=a.next, next_template=a.next_template)
     print(f"נרשם שנשלח ({RULES['events'][a.type]['label']}). הצעד הבא: {c['next_action'] or '—'} · עד {c['next_action_date'] or '—'}")
 
 
@@ -451,6 +459,57 @@ def cmd_history(a):
     print(out)
 
 
+
+FORBIDDEN = ["יד ימין", "קורא חוזים", "מחיר השקה"]
+MONEY = re.compile(r"(₪\s*\d|\d[\d,.]*\s*(₪|ש\"ח|שקל|NIS|ils))", re.I)
+PCT = re.compile(r"\d+(\.\d+)?\s*%")
+HOURS = re.compile(r"\d+(\.\d+)?\s*(שעות|שעה|ימים|דקות)")
+
+
+def lint_text(text, c):
+    """Deterministic checks on one draft. Returns [(level, message)], level FAIL or WARN."""
+    out = []
+    if DRAFT not in text:
+        out.append(("FAIL", f"חסרה החותמת \"{DRAFT}\""))
+    for w in FORBIDDEN:
+        if w in text:
+            out.append(("FAIL", f"ביטוי אסור: {w}"))
+    for line in text.splitlines():
+        ok_src = any(k in line for k in ("לפי הלקוח", "נתונים לדוגמה", "קארין ממלאת"))
+        if MONEY.search(line) and "קארין ממלאת" not in line:
+            out.append(("FAIL", f"סכום כסף בלי החלטה של קארין: {line.strip()[:80]}"))
+        if PCT.search(line) and not ok_src:
+            out.append(("WARN", f"אחוז, לוודא שהלקוח אמר אותו: {line.strip()[:80]}"))
+        if HOURS.search(line) and not ok_src and not re.search(r"30 דקות|שיחת אפיון|\d+ שבועות", line):
+            out.append(("WARN", f"זמן או כמות, לוודא שמגיע מהלקוח: {line.strip()[:80]}"))
+    for addr in set(re.findall(r"[\w.+-]+@[\w-]+\.[\w.]+", text)):
+        if addr != c.get("email") and not addr.endswith("example.com"):
+            out.append(("WARN", f"כתובת מייל שאינה של הלקוח: {addr}"))
+    return out
+
+
+def cmd_lint(a):
+    folder = resolve(root_dir(a), a.client)
+    c = load(folder)
+    drafts = [d for d in c.get("pending_drafts", []) if not a.draft_ids or d["id"] in a.draft_ids]
+    if not drafts:
+        print("אין טיוטות פתוחות לבדיקה.")
+        return
+    fails = 0
+    for d in drafts:
+        text = open(os.path.join(folder, d["file"]), encoding="utf-8").read()
+        res = lint_text(text, c)
+        fails += sum(1 for lvl, _ in res if lvl == "FAIL")
+        print(f"{d['id']} · {d['title']}: " + ("PASS" if not res else ""))
+        for lvl, msg in res:
+            print(f"  {lvl} · {msg}")
+        todo = sorted(set(re.findall(r"\[[^\]]{2,40}\]", text)) - {f"[{DRAFT}]"})
+        if todo:
+            print("  למילוי לפני שליחה: " + " ".join(todo))
+    if fails:
+        raise SystemExit(f"{fails} FAIL")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="תיק לקוח · Boost2Business Duet")
     ap.add_argument("--root")
@@ -461,6 +520,8 @@ def main(argv=None):
         p.add_argument(f"--{k}")
     p.add_argument("--channel", default="whatsapp")
     p.add_argument("--consent-contact", action="store_true", help="the lead agreed to be contacted back")
+    p.add_argument("--next", help="override the first next action, e.g. when the need is clear: מענה ראשון + הזמנה לשיחה (/שיחה1)")
+    p.add_argument("--next-template")
     p.set_defaults(f=cmd_new)
     p = sp.add_parser("log")
     p.add_argument("client")
@@ -472,6 +533,8 @@ def main(argv=None):
     p.add_argument("--date")
     p.add_argument("--data", nargs="*")
     p.add_argument("--consent-given", action="store_true")
+    p.add_argument("--next", help="override the rule's next action (text)")
+    p.add_argument("--next-template", help="override the rule's template, e.g. whatsapp:/שיחה")
     p.set_defaults(f=cmd_log)
     p = sp.add_parser("draft")
     p.add_argument("client")
@@ -491,6 +554,8 @@ def main(argv=None):
     p.add_argument("draft_id")
     p.add_argument("--type", required=True)
     p.add_argument("--summary")
+    p.add_argument("--next", help="override the rule's next action (text)")
+    p.add_argument("--next-template", help="override the rule's template")
     p.set_defaults(f=cmd_sent)
     p = sp.add_parser("set")
     p.add_argument("client")
@@ -508,6 +573,10 @@ def main(argv=None):
     p.add_argument("--days", type=int, default=0)
     p.set_defaults(f=cmd_due)
     sp.add_parser("events").set_defaults(f=cmd_events)
+    p = sp.add_parser("lint")
+    p.add_argument("client")
+    p.add_argument("draft_ids", nargs="*")
+    p.set_defaults(f=cmd_lint)
     p = sp.add_parser("history")
     p.add_argument("client")
     p.add_argument("--out")
