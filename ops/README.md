@@ -6,6 +6,8 @@
 | `whatsapp-setup.pdf` | הגדרת WhatsApp Business + כל 12 התשובות המהירות | פעם אחת, כ-20 דקות בטלפון |
 | `discovery-call-kit.pdf` | תסריט שיחת אפיון + טופס סיכום להדפסה | בכל שיחה |
 | `pipeline-onepager.pdf` | 10 השלבים בעמוד אחד: מי עושה מה ואיפה את מאשרת | מפה לתלות ליד המחשב |
+| `duet/duet-setup.pdf` | איך מפעילים את צוות Duet (2 עמודים) | פעם אחת, כ-30 דקות |
+| `duet/skills/*.zip` | 10 הסקילים של הצוות | מעלים ל-Claude: הגדרות ← יכולות ← סקילים |
 | `examples/quote-sample.pdf` | הצעת מחיר לדוגמה לעסק דמיוני | ככה נראית הצעה מהמחולל |
 
 **לבנות מחדש:** `python3 tools/build_ops_docs.py` (ה-PDF-ים) · `python3 tools/make_tracker.py` (הטבלה) · `python3 tools/make_quote.py summary.txt` (הצעה אמיתית, נשמרת ב-`out/quotes/` שלא נכנס ל-git).

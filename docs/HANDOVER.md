@@ -2,6 +2,22 @@
 
 A cloud Claude Code session wrote this at the end of the v6 work, at Karin's request ("/Handover … פרויקט חדש ב-GitHub"). It is the single page to read before doing anything. Karin received the same content in Hebrew, as `handover/Boost2Business-Handover.pdf`.
 
+## 0a. Update, 6 Nov 2026: the Duet team is built
+On top of phase 1 there is now a team of 10 Claude skills, one per touch point, plus a client-folder engine. Read **docs/DUET.md**.
+- Every input is logged and drives the next step through `duet/rules.json`.
+- Summary emails carry value propositions matched to the call topics.
+- Recordings need consent.
+- `history` returns all communication with a client.
+
+**Karin's steps:**
+1. Join the Duet waitlist.
+2. Connect Gmail, Calendar and Drive.
+3. Upload `ops/duet/skills/*.zip`.
+4. Paste `duet/MEMORY.md`.
+5. Send the path of her client folder.
+
+The guide is `ops/duet/duet-setup.pdf`. Open decisions D15–D19 are in DECISIONS.md.
+
 ## 0. Update, 27 Oct 2026: phase 1 built (lead → call → quote)
 The kit lives in GitHub: karinm311/Boost2buisness, branch `main`. Phase 1 (docs/TASK.md) was built with the D1–D4 defaults. Everything client-facing is stamped "טיוטה לאישור קארין", and no price, term or guarantee was filled.
 

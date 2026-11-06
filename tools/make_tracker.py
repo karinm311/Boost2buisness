@@ -34,7 +34,7 @@ LAST = ROWS + 1
 
 # key -> (Hebrew header, width)
 HEAD = {
-    "lead_id": ("מס׳ ליד", 9), "created_at": ("תאריך פנייה", 12), "name": ("שם", 16), "phone": ("טלפון", 13),
+    "lead_id": ("מס׳ ליד", 9), "created_at": ("תאריך פנייה", 12), "name": ("שם", 16), "phone": ("טלפון", 13), "email": ("מייל", 20),
     "source": ("מקור", 15), "track": ("מסלול", 10), "first_message": ("ההודעה הראשונה (בקצרה)", 30),
     "stage": ("שלב", 16), "next_action": ("הצעד הבא", 22), "next_action_date": ("עד מתי", 11),
     "call_date": ("תאריך שיחה", 11), "call_summary_link": ("קישור לסיכום שיחה", 16), "quote_id": ("מס׳ הצעה", 11),

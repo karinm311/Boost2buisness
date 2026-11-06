@@ -6,7 +6,8 @@
 > 3. **docs/TASK.md**: the current job, building the lead-to-support pipeline.
 > 4. **docs/PIPELINE.md**: the 10 stages from WhatsApp lead to support.
 > 5. **docs/DECISIONS.md**: open decisions that only Karin can make.
-> 6. **ops/**: the phase-1 working assets (tracker, WhatsApp, call kit, quote sample, pipeline one-pager). HANDOVER.md §0 lists how to rebuild each.
+> 6. **docs/DUET.md**: the Claude Duet agent team (one skill per touch point) and the client folder. Edit `duet/`, then run `tools/build_duet.py`.
+> 7. **ops/**: the phase-1 working assets (tracker, WhatsApp, call kit, quote sample, pipeline one-pager). HANDOVER.md §0 lists how to rebuild each.
 >
 > **Background:**
 > - **docs/HISTORY.md**: what was built and how Karin reacted.
@@ -63,6 +64,7 @@ The site is Hebrew, RTL and mobile-first. Most traffic comes from LinkedIn, Face
 - **The one action on the site:** WhatsApp `https://wa.me/972547501261`, a plain link with no prefilled text (Karin chose this). Phone 054-7501261.
 
 ## Working with Karin
+- **Plans:** show every plan to her briefly, as short numbered steps she can approve (her request, Nov 2026).
 - Reply in Hebrew when she writes Hebrew. Be warm, direct and human ("תכלס"), with no corporate polish. She addresses Claude as "אתה", so use masculine or neutral forms for yourself.
 - She types fast. Known shorthand and typos:
   - "דולות" = dashboards

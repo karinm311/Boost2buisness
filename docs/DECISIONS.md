@@ -15,6 +15,15 @@ How to use this file:
 
 Phase 1 was built on 27 Oct 2026 with these defaults: `ops/lead-tracker.xlsx` (D1, upload to Drive → Google Sheet), plain link (D2; the funnel's "by source" table will show mostly "לא ידוע" until D2 changes), 24 h internal goal shown only as a placeholder in the greeting message (D3), manual booking with `/שיחה` and `/תזכורת` (D4).
 
+## Open: the Duet team (6 Nov 2026; see docs/DUET.md)
+| # | Decision | Default until she answers |
+|---|---|---|
+| D15 | Recording-consent wording at the start of calls | Draft line in the call script, "אני מקליטה כדי לסכם בשבילכם מדויק, ההקלטה נשארת אצלי. זה בסדר מבחינתכם?" **Needs a lawyer** (Privacy Protection Law, Amendment 13) |
+| D16 | Recording/transcription tool | Any tool that gives a transcript (Meet, Zoom, a phone recorder app). Claude doesn't transcribe audio |
+| D17 | Client-folder home | Her computer (her answer, 27 Oct). She sends the path. Later, Drive "Boost2Business · לקוחות" so Duet can reach it from the cloud |
+| D18 | Gmail account for drafts | Her Gmail, connected by her in Claude → Connectors. Until then, `.eml` draft files |
+| D19 | Duet access | She joins the waitlist herself. Until then, the same skills run in claude.ai and in Claude Code |
+
 ## Open: money, legal, identity (Karin only)
 | # | Decision | Notes |
 |---|---|---|
@@ -49,3 +58,4 @@ Phase 1 was built on 27 Oct 2026 with these defaults: `ops/lead-tracker.xlsx` (D
 | 26 Oct 2026 | v6 design approved and locked | "יפה סופסוף, תשמר את העיצוב" |
 | 26 Oct 2026 | All three offerings stay visible: solutions for offices and businesses, the agents team, learning 1:1 and 1:n | "אני עדיין מוכרת גם פתרונות ai למשרדים ובעלי עסקים ולמידה 1:1, 1:n" |
 | 26 Oct 2026 | A new GitHub project continues the business build: lead to support | "/Handover … פרויקט חדש בgithub" |
+| 27 Oct 2026 | The whole client journey runs with a Claude Duet agent team; one team member per touch point; every input logged and driving the next step; a client folder with all communication; emails as Gmail drafts; client folder on her computer for now | "המטרה שיעבוד עם claude duet agent … תיקיית לקוח שתחזיר את כל ההתקשרות" |

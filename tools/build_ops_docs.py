@@ -118,7 +118,7 @@ def whatsapp_doc():
 
 # ---------------------------------------------------------------- discovery call
 def call_doc():
-    agenda = [("0–5′", "היכרות", "מי אני (מ-2011 בונה פתרונות מערכות), מה העסק שלכם, ומה הביא אתכם"),
+    agenda = [("0–5′", "היכרות", "מי אני (מ-2011 בונה פתרונות מערכות), מה העסק שלכם, ומה הביא אתכם. אם מקליטים: \"אני מקליטה כדי לסכם בשבילכם מדויק, ההקלטה נשארת אצלי. זה בסדר מבחינתכם?\""),
               ("5–20′", "שאלות", "השאלות למטה. לבקש להראות במסך תהליך אחד"),
               ("20–27′", "מפת המשימות", "מה אפשר להעביר לסוכן, מה לפתרון, ומה ללמוד. ואיפה אתם מאשרים"),
               ("27–30′", "הצעד הבא", "\"אשלח הצעה עד [יום]\". לבדוק מי מקבל החלטות")]
@@ -237,12 +237,77 @@ def pipeline_doc():
                 sub="10 השלבים, מי עושה מה, ואיפה את מאשרת", foot_note="מפת התהליך")
 
 
+# ---------------------------------------------------------------- Duet team setup
+TOUCH = [  # touch point, what Karin gives, what the team prepares, what she approves, event logged
+    ("ליד חדש", "ההודעה הראשונה (העתקה או צילום)", "תיק לקוח + טיוטת /שלום", "שליחת המענה", "lead_in · reply_sent"),
+    ("מעקב", "\"מה מחכה לי היום?\"", "רשימת משימות + תזכורות ומעקבים", "כל הודעה", "call_booked · followup_sent"),
+    ("שיחת אפיון", "תמלול השיחה (או הערות)", "סיכום + מפת משימות + נושאים", "שהלקוח הסכים להקלטה", "call_transcript · call_notes"),
+    ("סיכום והצעת ערך", "—", "טיוטת מייל ב-Gmail לפי הנושאים שעלו", "התוכן ושליחה", "summary_sent"),
+    ("הצעת מחיר", "המחירים והתנאים שלך", "PDF הצעה + מייל מלווה", "מחיר, היקף, שליחה", "quote_sent"),
+    ("סגירה ותשלום", "\"אישרו!\" / \"שילמו\"", "בקשת תשלום (אחרי D5–D9)", "סכום, קישור, קבלה", "quote_accepted · paid"),
+    ("אפיון מלא", "הערות מפגישת האפיון", "מייל פתיחה + מסמך אפיון", "האפיון לפני שליחה", "spec_sent · spec_signed"),
+    ("יישום", "מה הושלם השבוע", "עדכון שבועי, יומן שינויים, תוספות", "כל שינוי היקף", "build_update · change_request"),
+    ("עלייה לאוויר ותמיכה", "\"מוכן\" / פנייה של לקוח", "מסירה, צ׳קליסט, מענה, בדיקות תקופתיות", "עלייה לאוויר, תשובות", "golive · support_request"),
+    ("תיק לקוח", "\"מה קורה עם X?\"", "כל ההתקשרות לפי הסדר + תקציר", "—", "history"),
+]
+
+
+def duet_doc():
+    steps = [
+        ("להירשם ל-Duet", "Duet הוא סוכן יזום של Claude: בוקר טוב עם מה חשוב, בדיקות כל כמה שעות, ועבודה ברקע. כרגע בגרסת ניסיון עם רשימת המתנה, "
+         "בהתחלה למנויי <span class='ltr'>Pro/Max</span> בארה״ב. עד שתקבלי גישה, אותו צוות עובד כבר היום ב-<span class='ltr'>claude.ai</span> וב-<span class='ltr'>Claude Code</span>."),
+        ("לחבר אפליקציות", "בהגדרות של <span class='ltr'>Claude</span> ← מחברים (Connectors): <b>Gmail</b> (טיוטות מיילים), <b>Google Calendar</b> (שיחות), <b>Google Drive</b>. "
+         "את מתחברת בעצמך. Duet יורש את החיבורים, הסקילים והזיכרון מהחשבון."),
+        ("להעלות את הצוות", "בהגדרות ← יכולות ← סקילים ← העלאה: 10 הקבצים מ-<span class='ltr'>ops/duet/skills</span>. "
+         "אם רוצים להתחיל קטן: <span class='ltr'>b2b-duet, b2b-intake, b2b-discovery, b2b-proposal, b2b-client-file</span>."),
+        ("להדביק זיכרון", "את הטקסט מ-<span class='ltr'>duet/MEMORY.md</span>, כולל הנתיב לתיקיית הלקוחות שלך."),
+        ("תיקיית לקוחות", "תיקייה אחת במחשב (ובהמשך ב-Drive), ובה תיקייה לכל לקוח: פרופיל, יומן התקשרות, שיחות, טיוטות ומסמכים. "
+         "אף פעם לא ב-GitHub. כש-Duet רץ בענן, הוא עובד על התיקייה ב-Drive."),
+        ("התראות", "בהעדפות של Duet: מה לבדוק ומתי לפנות אלייך. הנוסח המוכן ב-<span class='ltr'>duet/BRIEF.md</span>."),
+    ]
+    st = "".join(f"<div class='box' style='display:flex;gap:3mm;align-items:flex-start;padding:2.4mm 3.5mm;margin-bottom:2.2mm'>"
+                 f"<span class='n' style='display:inline-grid;place-items:center;width:7mm;height:7mm;border-radius:50%;background:#4f46e5;color:#fff;font-weight:800;flex:none'>{i}</span>"
+                 f"<div><b>{t}</b><div class='small'>{d}</div></div></div>" for i, (t, d) in enumerate(steps, 1))
+    page1 = f"""
+<div class="box cy"><b>הרעיון:</b> צוות של 10 סקילים, אחד לכל נקודת מגע מהליד ועד התמיכה. כל קלט ממך או מהלקוח נרשם בתיק הלקוח ומניע את הצעד הבא.
+הצוות מכין טיוטות, ואת מאשרת ושולחת. <span class="hand">את מנהלת, הצוות עובד.</span></div>
+<h2><span class="n">★</span>הפעלה חד־פעמית · כ-30 דקות</h2>
+{st}
+<h2><span class="n">✓</span>שלושה משפטים לכל יום</h2>
+<div class="grid3">
+<div class="box vi small"><b>"ליד חדש:</b> דנה מכפר סבא, 052…, כתבה בוואטסאפ שהיא רוצה לחבר אקסל לחשבוניות"</div>
+<div class="box vi small"><b>"הנה התמלול</b> של השיחה עם דנה, היא הסכימה להקלטה"</div>
+<div class="box vi small"><b>"מה מחכה לי היום?"</b> או <b>"מה קורה עם דנה?"</b></div>
+</div>"""
+    rows = "".join(f"<tr><td><b>{a}</b></td><td>{ltr(b)}</td><td>{ltr(c)}</td><td>{ltr(d)}</td><td class='small ltr' style='text-align:left'>{e}</td></tr>"
+                   for a, b, c, d, e in TOUCH)
+    page2 = f"""
+<table class="small"><tr><th style="width:15%">נקודת מגע</th><th style="width:20%">מה את נותנת</th><th>מה הצוות מכין</th><th style="width:18%">מה את מאשרת</th><th style="width:20%">נרשם בתיק</th></tr>{rows}</table>
+<div class="grid2" style="margin-top:2mm">
+<div class="box"><h3 style="margin-top:0">תיק לקוח · מה יש בו</h3><ul class="small">
+<li><b>client.json:</b> פרטים, שלב, הצעד הבא, הסכמות, טיוטות שמחכות לך</li>
+<li><b>timeline.jsonl:</b> כל אירוע, מי, באיזה ערוץ, ומה</li>
+<li><b>inbox · calls · outbox · docs:</b> מה הלקוח שלח, שיחות, טיוטות, מסמכים</li>
+<li><b>HISTORY.md</b> ו-<b>תיק-לקוח.pdf:</b> כל ההתקשרות לפי הסדר</li></ul></div>
+<div class="box"><h3 style="margin-top:0">כללים שלא משתנים</h3><ul class="small">
+<li>הצוות לא שולח, לא משלם ולא מוחק. הכל טיוטה לאישורך.</li>
+<li>מחירים, תנאים וערבות: רק המספרים שלך.</li>
+<li>הקלטה רק בהסכמה. התמלול מגיע מהכלי שהקליט.</li>
+<li>תיקי לקוחות לא עולים ל-GitHub. רק מה שהשלב צריך.</li></ul></div>
+</div>
+<p class="small muted">דוגמה מלאה (עסק דמיוני) מהליד ועד הצעה שאושרה: <span class="ltr">duet/example-clients</span> · בנייה מחדש: <span class="ltr">python3 tools/build_duet.py</span></p>"""
+    return page("", "", kicker="Boost2Business · צוות Duet", sheets=[
+        ("Duet: איך מפעילים", "צוות סוכנים לכל נקודת מגע, ותיק לקוח עם כל ההתקשרות", page1),
+        ("מי בצוות עושה מה", "10 נקודות מגע, מה את נותנת ומה את מאשרת", page2),
+    ], foot_note="מדריך Duet")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--png", help="write PNG previews of every page into this folder")
     a = ap.parse_args()
     jobs = [("whatsapp-setup.pdf", whatsapp_doc()), ("discovery-call-kit.pdf", call_doc()),
-            ("pipeline-onepager.pdf", pipeline_doc())]
+            ("pipeline-onepager.pdf", pipeline_doc()), ("duet/duet-setup.pdf", duet_doc())]
     for name, doc in jobs:
         out = render(doc, os.path.join(OPS, name))
         print("wrote", os.path.relpath(out, ROOT))

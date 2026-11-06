@@ -1,0 +1,58 @@
+{
+  "id": "C-0001",
+  "name": "נועה (דמות לדוגמה)",
+  "phone": "050-0000000",
+  "email": "noa@example.com",
+  "business": "\"הדוגמה\" · משרד הנהלת חשבונות (עסק דמיוני)",
+  "source": "לינקדאין",
+  "track": "סוכן",
+  "created": "2026-11-06",
+  "stage": "4 ממתין לתשלום",
+  "next_action": "בקשת תשלום (רק אחרי D5–D9)",
+  "next_action_date": "2026-11-06",
+  "next_owner": "b2b-closing",
+  "consents": {
+    "contact": "yes",
+    "recording": "yes",
+    "recording_at": "2026-11-06T11:31:24"
+  },
+  "pending_drafts": [],
+  "lost_reason": "",
+  "notes": "",
+  "next_template": "email:payment-request",
+  "updated": "2026-11-06T11:31:25",
+  "last_contact": "2026-11-06",
+  "sent": [
+    {
+      "id": "D001",
+      "kind": "whatsapp",
+      "title": "מענה ראשון (/שלום)",
+      "file": "outbox/20261106-1131-D001-whatsapp.md",
+      "created": "2026-11-06T11:31:24",
+      "status": "sent",
+      "gmail_id": "",
+      "sent": "2026-11-06T11:31:24"
+    },
+    {
+      "id": "D002",
+      "kind": "email",
+      "title": "סיכום שיחה + הצעת ערך",
+      "file": "outbox/20261106-1131-D002-email.md",
+      "created": "2026-11-06T11:31:24",
+      "status": "sent",
+      "gmail_id": "",
+      "sent": "2026-11-06T11:31:24"
+    },
+    {
+      "id": "D003",
+      "kind": "email",
+      "title": "מייל מלווה להצעה Q-DEMO-001",
+      "file": "outbox/20261106-1131-D003-email.md",
+      "created": "2026-11-06T11:31:25",
+      "status": "sent",
+      "gmail_id": "",
+      "sent": "2026-11-06T11:31:25"
+    }
+  ],
+  "call_date": "2026-11-06"
+}
