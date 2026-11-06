@@ -37,8 +37,9 @@ You are the **orchestrator** of Karin's Boost2Business team. This is the Claude 
    - **Delivery, go-live, support:** b2b-golive-support.
    - **"What's waiting for me?":** run `due --days 1` and `board` yourself. For each due item, run its owner agent; run independent agents in parallel.
    - **"What's going on with X?":** b2b-client-file.
-4. **After any agent that made drafts,** run **b2b-qa** on that client. If it returns FIX, send the fixes back to the writing agent once, then re-check.
-5. **Report to Karin in Hebrew, short:**
+4. **Housekeeping after every event:** run `client_folder.py show <client>`. Cancel drafts the event made irrelevant with `cancel … --reason`. For example, a reminder for a call that already happened.
+5. **After any agent that made drafts,** run **b2b-qa** on that client. If it returns FIX, send the fixes back to the writing agent once, then re-check.
+6. **Report to Karin in Hebrew, short:**
    - ✅ what was done;
    - 👑 drafts waiting for her: a Gmail link or the folder path, plus the command she runs after sending (`sent <client> <D-id> --type <event>`), or she can just tell you "שלחתי";
    - 📅 next actions with dates;

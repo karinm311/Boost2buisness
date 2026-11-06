@@ -146,6 +146,15 @@ class ClientFolderTest(unittest.TestCase):
         self.assertIn("PASS", out)
         self.assertIn("[קארין ממלאת]", out)
 
+    def test_summary_routes_to_proposal_and_cancel_draft(self):
+        b = self.file("תזכורת", "r.txt")
+        run(self.root, "draft", "C-0001", "--kind", "whatsapp", "--title", "תזכורת", "--body-file", b)
+        run(self.root, "log", "C-0001", "--type", "call_summary_ready", "--summary", "סיכום")
+        self.assertEqual(self.client()["next_owner"], "b2b-proposal")
+        run(self.root, "cancel", "C-0001", "D001", "--reason", "השיחה התקיימה")
+        self.assertEqual(self.client()["pending_drafts"], [])
+        self.assertEqual(cf.timeline(self.folder)[-1]["type"], "draft_cancelled")
+
     def test_unknown_event_rejected(self):
         with self.assertRaises(SystemExit):
             run(self.root, "log", "C-0001", "--type", "nope", "--summary", "x")

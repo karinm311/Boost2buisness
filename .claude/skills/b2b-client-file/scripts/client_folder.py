@@ -28,6 +28,7 @@ usage:
   client_folder.py draft CLIENT --kind email|whatsapp|doc --title T --body-file F [--to ADDR] [--subject S] [--gmail-id ID]
   client_folder.py approve CLIENT DRAFT_ID          (Karin approved; the draft can be sent)
   client_folder.py sent CLIENT DRAFT_ID --type EVENT   (Karin sent it; logs EVENT, e.g. summary_sent)
+  client_folder.py cancel CLIENT DRAFT_ID --reason R   (a draft that is no longer relevant; never deletes Gmail drafts)
   client_folder.py set CLIENT key=value ...        (profile fields; consents.recording=yes etc.)
   client_folder.py show CLIENT | find TEXT | board | due [--days N] | history CLIENT [--out F] [--brief]
   client_folder.py events                          (the event types and what each triggers)
@@ -313,6 +314,18 @@ def cmd_sent(a):
     print(f"נרשם שנשלח ({RULES['events'][a.type]['label']}). הצעד הבא: {c['next_action'] or '—'} · עד {c['next_action_date'] or '—'}")
 
 
+def cmd_cancel(a):
+    folder = resolve(root_dir(a), a.client)
+    c = load(folder)
+    d = _draft(c, a.draft_id)
+    c["pending_drafts"] = [x for x in c["pending_drafts"] if x["id"] != d["id"]]
+    c.setdefault("cancelled", []).append({**d, "status": "cancelled", "reason": a.reason})
+    save(folder, c)
+    do_log(folder, "draft_cancelled", f"בוטלה: {d['title']} · {a.reason}", who="agent", channel="note",
+           data={"draft_id": d["id"]})
+    print(f"{d['id']} בוטלה ({a.reason}). אם יש טיוטה ב-Gmail, קארין מוחקת אותה בעצמה." if d.get("gmail_id") else f"{d['id']} בוטלה ({a.reason}).")
+
+
 def cmd_set(a):
     folder = resolve(root_dir(a), a.client)
     c = load(folder)
@@ -557,6 +570,11 @@ def main(argv=None):
     p.add_argument("--next", help="override the rule's next action (text)")
     p.add_argument("--next-template", help="override the rule's template")
     p.set_defaults(f=cmd_sent)
+    p = sp.add_parser("cancel")
+    p.add_argument("client")
+    p.add_argument("draft_id")
+    p.add_argument("--reason", required=True)
+    p.set_defaults(f=cmd_cancel)
     p = sp.add_parser("set")
     p.add_argument("client")
     p.add_argument("pairs", nargs="+")

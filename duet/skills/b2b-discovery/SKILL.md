@@ -25,7 +25,9 @@ description: "Boost2Business discovery-call processing. Use after a discovery ca
    
    Leave price, payment terms, weeks and validity empty. Those are Karin's.
    
-   Save it in the folder: `client_folder.py log <client> --type note --summary "סיכום שיחה + מפת משימות" --file summary.txt`
+   Save it in the folder: `client_folder.py log <client> --type call_summary_ready --summary "סיכום שיחה + מפת משימות · נושאים: <ids>" --file summary.txt`. This routes the client to b2b-proposal.
+   - **The call date:** use `--date` with the real call date (from the booking in the timeline, or from Karin) when it differs from today.
+   - **Stale drafts:** if a pre-call reminder or reschedule draft is still pending, cancel it: `client_folder.py cancel <client> <D###> --reason "השיחה התקיימה"`.
 4. **Detect topics:**
    - Match the transcript against `keywords` in `references/value-props.json`.
    - Keep the 1–3 strongest topics the client really talked about.
