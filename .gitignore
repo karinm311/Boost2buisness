@@ -17,3 +17,22 @@ __pycache__/
 
 # real client folders = personal data (Duet / client_folder.py default root)
 clients/
+
+# --- Aggi (new-customer WhatsApp agent) and general safety: the repo is PUBLIC ---
+# real conversations, customer data, logs and recordings of the agent
+Aggi*/clients/
+Aggi*/data/
+Aggi*/conversations/
+Aggi*/logs/
+Aggi*/**/*.vtt
+Aggi*/**/*.mp3
+Aggi*/**/*.m4a
+Aggi*/**/*.wav
+# secrets and personal local settings, any folder
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+.claude/settings.local.json
+*.local.*
